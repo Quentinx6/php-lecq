@@ -39,23 +39,71 @@ session_start();
                 $age = $_POST['user-age'];
                 $taille = $_POST['user-nombre'];
                 $rad = $_POST['user-radio'];
-                $table = [
-                    "prenom" => $pre ,
-                    "nom"  =>  $nom,
+                $table = array(
+                    "first_name" => $pre,
+                    "last_name"  =>  $nom,
                     "age" => $age,
-                    "taille" => $taille,
-                    "choix" => $rad
-                ];
+                    "size" => $taille,
+                    "situation" => $rad
+                );
                 $_SESSION['table'] = $table;
                 echo "<h2> Données sauvegardées</h2>";
             }
             else if(isset($_GET['del'])){
                 $login = $_SESSION['table'];
                 session_destroy();
-                echo "<h2>Données supprimées</h2>";
+                echo "<h2>Les données ont bien été supprimées</h2>";
+            }
+            else if(isset($_GET['debugging'])){
+                echo "<h2>Débogage</h2>";
+                echo "<p>===> Lecture du tableau à l'aide de la fonction print_r()</p>";
+                $table = $_SESSION['table'];
+                echo "<pre>";
+                print_r($table);
+                echo "</pre>";
+            }
+            else if(isset($_GET['concatenation'])){
+                $con = $_SESSION['table'];
+                echo "<h2>Concaténation</h2>";
+                echo "<p>===> Construction d'une phrase avec le contenu du tableau :</p>";
+                echo "<h3>$con[first_name] $con[last_name]</h3>";
+                echo "<p>$con[age] ans, je mesure $con[size] et je fais partie des $con[situation] de la promo Simplon.</p>";
+                $nomMaj = strtoupper($con['last_name']);
+                echo "<p>===> Construction d'une phrase après MAJ du tableau :</p>";
+                echo "<h3>$con[first_name] $nomMaj</h3>";
+                echo "<p>$con[age] ans, je mesure $con[size] et je fais partie des $con[situation] de la promo Simplon.</p>";
+                echo "<p>===> Affichage d'une virgule à la place du point pour la taille :</p>";
+                $virgule = str_replace(".", ",",$con['size']);
+                echo "<h3>$con[first_name] $nomMaj</h3>";
+                echo "<p>$con[age] ans, je mesure $virgule et je fais partie des $con[situation] de la promo Simplon.</p>";
+            }
+            else if (isset($_GET['loop'])) {
+                $login = $_SESSION['table'];
+                echo "<h2>Boucle</h2>";
+                echo "<p>===> Lecture du tableau à l'aide d'une boucle foreach</p>";
+                $i = 0;
+                foreach($login as $cle => $element) {
+                echo "<p>à la ligne n°$i correspond la clé $cle et contient $element</p>";
+                $i++;
+                }
+            }
+            else if (isset($_GET['function'])){
+                $login = $_SESSION['table'];
+                echo "<h3>Fonction</h3>";
+                echo "<p>===> J'utilise ma fonction readTable()</p>";
+                readTable();
             }
             else{
                 echo "<a href='index.php?add' class='btn btn-primary ml-5 px-3'>Ajouter des données</a>";
+            }
+            ?>
+            <?php
+            function readTable(){
+                $login = $_SESSION['table'];
+                foreach($login as $cle => $element) {
+                echo "<p>à la ligne n°$i correspond la clé $cle et contient $element</p>";
+                $i++;
+                }
             }
             ?>
         </section>
