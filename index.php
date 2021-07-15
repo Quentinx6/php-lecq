@@ -1,39 +1,35 @@
-<?php
+<?php       // Essentiel pour la création de session
 session_start();
 ?>
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <title>Premier back</title>
+    <?php
+        include "includes/head.inc.html";
+    ?>
 </head>
 <body>
 <header>
-    <div class="jumbotron d-none d-sm-block">
-        <h1 class="display-4">PHP procédural</h1>
-        <hr class="my-4">
-        <p class="lead">J'apprends et je me perfectionne.</p>
-    </div>
+    <?php
+        include "includes/header.inc.html";
+    ?>
 </header>
+<div class="container-fluid">
     <div class="row">
-        <nav class="d-inline col-sm-2 col-lg-2 m-5">
-            <a href="index.php" type="submit" class="btn btn-outline-secondary col-sm-8">Home</a>
+        <nav class="col-sm-3 pt-3">
+            <a href="index.php" type="submit" class="btn btn-outline-secondary col-sm-12">Home</a> <!-- bouton "HOME" -->
             <?php
             if(!empty($_SESSION)) {
                 include "includes/ul.inc.html";
             }
             ?>
         </nav>
-        <section class="col-sm-8 m-5">
+        <section class="col-sm-8 pt-3">
             <?php
-            if(isset($_GET['add'])) {
+            if(isset($_GET['add'])) {       // Include pour le formulaire
                 include 'includes/form.inc.html';
             }
-            else if(isset($_POST['enregistrer'])){
+            else if(isset($_POST['enregistrer'])){      //Création de session
                 $pre = $_POST['user-prenom'];
                 $nom = $_POST['user-name'];
                 $age = $_POST['user-age'];
@@ -49,12 +45,12 @@ session_start();
                 $_SESSION['table'] = $table;
                 echo "<h2> Données sauvegardées</h2>";
             }
-            else if(isset($_GET['del'])){
+            else if(isset($_GET['del'])){       //Données supprimées
                 $login = $_SESSION['table'];
                 session_destroy();
                 echo "<h2>Les données ont bien été supprimées</h2>";
             }
-            else if(isset($_GET['debugging'])){
+            else if(isset($_GET['debugging'])){     //Débogage
                 echo "<h2>Débogage</h2>";
                 echo "<p>===> Lecture du tableau à l'aide de la fonction print_r()</p>";
                 $table = $_SESSION['table'];
@@ -62,34 +58,40 @@ session_start();
                 print_r($table);
                 echo "</pre>";
             }
-            else if(isset($_GET['concatenation'])){
+            else if(isset($_GET['concatenation'])){     //Concaténation
                 $con = $_SESSION['table'];
                 echo "<h2>Concaténation</h2>";
+                echo "<br>";
                 echo "<p>===> Construction d'une phrase avec le contenu du tableau :</p>";
                 echo "<h3>$con[first_name] $con[last_name]</h3>";
                 echo "<p>$con[age] ans, je mesure $con[size] et je fais partie des $con[situation] de la promo Simplon.</p>";
-                $nomMaj = strtoupper($con['last_name']);
+                $con['last_name'] = strtoupper($con['last_name']);
+                echo "<br>";
                 echo "<p>===> Construction d'une phrase après MAJ du tableau :</p>";
-                echo "<h3>$con[first_name] $nomMaj</h3>";
+                echo "<h3>$con[first_name] $con[last_name]</h3>";
                 echo "<p>$con[age] ans, je mesure $con[size] et je fais partie des $con[situation] de la promo Simplon.</p>";
+                echo "<br>";
                 echo "<p>===> Affichage d'une virgule à la place du point pour la taille :</p>";
                 $virgule = str_replace(".", ",",$con['size']);
-                echo "<h3>$con[first_name] $nomMaj</h3>";
+                echo "<h3>$con[first_name] $con[last_name]</h3>";
                 echo "<p>$con[age] ans, je mesure $virgule et je fais partie des $con[situation] de la promo Simplon.</p>";
             }
-            else if (isset($_GET['loop'])) {
+            else if (isset($_GET['loop'])) {        //Boucle
                 $login = $_SESSION['table'];
                 echo "<h2>Boucle</h2>";
+                echo "<br>";
                 echo "<p>===> Lecture du tableau à l'aide d'une boucle foreach</p>";
+                echo "<br>";
                 $i = 0;
                 foreach($login as $cle => $element) {
-                echo "<p>à la ligne n°$i correspond la clé $cle et contient $element</p>";
+                echo '<div>à la ligne n°'.$i.' correspond la clé "'.$cle.'" et contient "'.$element.'"</div>';
                 $i++;
                 }
             }
-            else if (isset($_GET['function'])){
+            else if (isset($_GET['function'])){     //Appelle function foreach
                 $login = $_SESSION['table'];
                 echo "<h3>Fonction</h3>";
+                echo "<br>";
                 echo "<p>===> J'utilise ma fonction readTable()</p>";
                 readTable();
             }
@@ -98,18 +100,24 @@ session_start();
             }
             ?>
             <?php
-            function readTable(){
+            function readTable(){       // Création de la fonction
                 $login = $_SESSION['table'];
+                $gui = '"';
+                $i = 0;
                 foreach($login as $cle => $element) {
-                echo "<p>à la ligne n°$i correspond la clé $cle et contient $element</p>";
-                $i++;
+                    echo '<div>à la ligne n°'.$i.' correspond la clé "'.$cle.'" et contient "'.$element.'"</div>';
+                    $i++;
                 }
             }
             ?>
         </section>
     </div>
+</div>
+
 <footer>
-        <p class="text-center">© 2021 Quentin Lecompte - PHP</p>
+    <?php
+        include "includes/footer.inc.html";
+    ?>
 </footer>
 </body>
 </html>
