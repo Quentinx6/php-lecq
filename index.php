@@ -20,34 +20,34 @@ session_start();
             <a href="index.php" type="submit" class="btn btn-outline-secondary col-sm-12">Home</a> <!-- bouton "HOME" -->
             <?php
             if(!empty($_SESSION)) {
-                include "includes/ul.inc.html";
+                include "includes/ul.inc.html"; //Inclu la liste de navigation via un, autre fichier html
             }
             ?>
         </nav>
         <section class="col-sm-8 pt-3">
             <?php
-            if(isset($_GET['add'])) {       // Include pour le formulaire
-                include 'includes/form.inc.html';
+            if(isset($_GET['add'])) {
+                include 'includes/form.inc.html';   // Include pour le formulaire via un autre fichier
             }
-            else if(isset($_POST['enregistrer'])){      //Création de session
+            else if(isset($_POST['enregistrer'])){      //Si on enregistre des données alors ca créer la session sinon on fait cette parti n'est pas exécuté
                 $pre = $_POST['user-prenom'];
                 $nom = $_POST['user-name'];
                 $age = $_POST['user-age'];
                 $taille = $_POST['user-nombre'];
                 $rad = $_POST['user-radio'];
-                $table = array(
+                $table = array(                 //On créer le tableau
                     "first_name" => $pre,
                     "last_name"  =>  $nom,
                     "age" => $age,
                     "size" => $taille,
                     "situation" => $rad
                 );
-                $_SESSION['table'] = $table;
+                $_SESSION['table'] = $table;    //On met le tableau dans une variable
                 echo "<h2> Données sauvegardées</h2>";
             }
             else if(isset($_GET['del'])){       //Données supprimées
                 $login = $_SESSION['table'];
-                session_destroy();
+                session_destroy();  // On supprime la session
                 echo "<h2>Les données ont bien été supprimées</h2>";
             }
             else if(isset($_GET['debugging'])){     //Débogage
@@ -55,7 +55,7 @@ session_start();
                 echo "<p>===> Lecture du tableau à l'aide de la fonction print_r()</p>";
                 $table = $_SESSION['table'];
                 echo "<pre>";
-                print_r($table);
+                print_r($table);            //On envoie le tableau dans html
                 echo "</pre>";
             }
             else if(isset($_GET['concatenation'])){     //Concaténation
@@ -65,7 +65,7 @@ session_start();
                 echo "<p>===> Construction d'une phrase avec le contenu du tableau :</p>";
                 echo "<h3>$con[first_name] $con[last_name]</h3>";
                 echo "<p>$con[age] ans, je mesure $con[size] et je fais partie des $con[situation] de la promo Simplon.</p>";
-                $con['last_name'] = strtoupper($con['last_name']);
+                $con['last_name'] = strtoupper($con['last_name']);  //Premier lettre en MAJ
                 echo "<br>";
                 echo "<p>===> Construction d'une phrase après MAJ du tableau :</p>";
                 echo "<h3>$con[first_name] $con[last_name]</h3>";
@@ -93,7 +93,7 @@ session_start();
                 echo "<h3>Fonction</h3>";
                 echo "<br>";
                 echo "<p>===> J'utilise ma fonction readTable()</p>";
-                readTable();
+                readTable();    // Appelle de la fonction
             }
             else{
                 echo "<a href='index.php?add' class='btn btn-primary ml-5 px-3'>Ajouter des données</a>";
